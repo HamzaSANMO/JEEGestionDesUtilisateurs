@@ -8,6 +8,7 @@
 	</head>
 	
 	<body>
+		
 		<div class="nameForm">
 			<h2>Bienvenu sur notre formulaire</h2>
 		</div>
@@ -23,5 +24,11 @@
 		        <input type="submit" value="Envoyer">
 		    </form>
 		</div>
+		
+		<% String messageErreur = (String) request.getAttribute("erreur"); %>
+		<% if (messageErreur != null) { %>
+		    <p style="color:red;"><%= messageErreur %></p>
+		<% } %>
+		
 	</body>
 </html>

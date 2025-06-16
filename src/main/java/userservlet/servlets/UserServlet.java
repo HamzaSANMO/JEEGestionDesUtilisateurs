@@ -38,10 +38,12 @@ public class UserServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		
 		//condition pour verifier si les donnees ne pas vides
-		if(nom == null || nom.trim().isEmpty() || email == null ||email.trim().isEmpty()) {
-			response.getWriter().println("Tous less champs sont obligatoires");
-			return;
+		if (nom == null || nom.trim().isEmpty() || email == null || email.trim().isEmpty()) {
+		    request.setAttribute("erreur", "Tous les champs sont obligatoires.");
+		    request.getRequestDispatcher("/WEB-INF/userForm.jsp").forward(request, response);
+		    return;
 		}
+
 		
 		//creation d'un nouvel objet User
 		
@@ -55,6 +57,18 @@ public class UserServlet extends HttpServlet {
 		if(utilisateurs == null) {
 			utilisateurs = new ArrayList<>();
 		}
+		
+		// Vérifier si l'utilisateur existe déjà dans la liste
+		boolean existeDeja = utilisateurs.stream().anyMatch(u -> 
+		    u.getNom().equalsIgnoreCase(nom) && u.getEmail().equalsIgnoreCase(email)
+		);
+
+		if (existeDeja) {
+		    request.setAttribute("erreur", "Cet utilisateur existe déjà.");
+		    request.getRequestDispatcher("/WEB-INF/userForm.jsp").forward(request, response);
+		    return;
+		}
+
 		
 		//ajout d'un nouvel utilisateurs
 		utilisateurs.add(nouvelUtilisateur);
